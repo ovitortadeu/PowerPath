@@ -42,6 +42,11 @@ public class CarroBO {
         return carroDAO.excluir(idCarro);
     }
 
+    public ArrayList<CarroTO> listarTodos() {
+        carroDAO = new CarroDAO();
+        // Sem regras de negócio especificas para listar carros.
+        return carroDAO.listarTodos();
+    }
 
     public CarroTO visualizarPeloCodigo(int idCarro) {
         carroDAO = new CarroDAO();

@@ -15,7 +15,7 @@ public class CarroDAO extends Repository{
         try (PreparedStatement ps = getConnection().prepareStatement(sql)) {
             ps.setInt(1, carroTO.getIdUsuario());
             ps.setString(2, carroTO.getModelo());
-            ps.setDate(3, Date.valueOf(carroTO.getAno()));
+            ps.setInt(3, carroTO.getAno());
             ps.setString(4, carroTO.getMarca());
             ps.setString(5, carroTO.getTipo());
             ps.setLong(6, carroTO.getQuantidadeCarbono());
@@ -37,7 +37,7 @@ public class CarroDAO extends Repository{
             ps.setString(1, carroTO.getModelo());
             ps.setString(2, carroTO.getMarca());
             ps.setInt(3, carroTO.getIdUsuario());
-            ps.setDate(4, Date.valueOf(carroTO.getAno()));
+            ps.setInt(4, carroTO.getAno());
             ps.setString(5, carroTO.getTipo());
             ps.setLong(6, carroTO.getQuantidadeCarbono());
             ps.setLong(7, carroTO.getRecarga());
@@ -66,6 +66,33 @@ public class CarroDAO extends Repository{
         return false;
     }
 
+    public ArrayList<CarroTO> listarTodos() {
+        String sql = "select * from T_PW_CARRO order by id_carro";
+        ArrayList<CarroTO> listaCarroTO = new ArrayList<CarroTO>();
+        try (PreparedStatement ps = getConnection().prepareStatement(sql);) {
+            ResultSet rs = ps.executeQuery();
+            if (rs != null) {
+                while (rs.next()) {
+                    CarroTO carroTO = new CarroTO();
+                    carroTO.setIdUsuario(rs.getInt("id_usuario"));
+                    carroTO.setIdCarro(rs.getInt("id_carro"));
+                    carroTO.setModelo(rs.getString("modelo"));
+                    carroTO.setMarca(rs.getString("marca"));
+                    carroTO.setAno(rs.getInt("ano"));
+                    carroTO.setQuantidadeCarbono(rs.getLong("quantidade_carbono"));
+                    carroTO.setRecarga(rs.getLong("recarga"));
+                    carroTO.setTipo(rs.getString("tipo"));
+                    listaCarroTO.add(carroTO);
+                }
+                return listaCarroTO;
+            } else {
+                return null;
+            }
+        } catch (SQLException e) {
+            System.out.println("Erro de SQL: " + e.getMessage());
+            return null;
+        }
+    }
     public CarroTO vizualizarPeloCodigo(int idCarro) {
         CarroTO carroTO = new CarroTO();
         String sql = "select * from T_PW_CARRO where id_carro=?";
@@ -76,7 +103,7 @@ public class CarroDAO extends Repository{
                 carroTO.setIdUsuario(rs.getInt("id_usuario"));
                 carroTO.setModelo(rs.getString("modelo"));
                 carroTO.setMarca(rs.getString("marca"));
-                carroTO.setAno(rs.getDate("ano").toLocalDate());
+                carroTO.setAno(rs.getInt("ano"));
                 carroTO.setQuantidadeCarbono(rs.getLong("quantidade_carbono"));
                 carroTO.setRecarga(rs.getLong("recarga"));
                 carroTO.setTipo(rs.getString("tipo"));

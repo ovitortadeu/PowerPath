@@ -21,14 +21,14 @@ public class CarroTO {
     @PositiveOrZero
     private Long quantidadeCarbono;
     @PastOrPresent
-    private LocalDate ano;
+    private int ano;
     @PositiveOrZero
     private Long recarga;
 
     public CarroTO() {
     }
 
-    public CarroTO(int idCarro, int idUsuario, String modelo, String marca, String tipo, LocalDate ano, Long quantidadeCarbono, Long recarga) {
+    public CarroTO(int idCarro, int idUsuario, String modelo, String marca, String tipo, int ano, Long quantidadeCarbono, Long recarga) {
         this.idCarro = idCarro;
         this.idUsuario = idUsuario;
         this.modelo = modelo;
@@ -71,10 +71,10 @@ public class CarroTO {
     public void setTipo(@NotBlank String tipo) {
         this.tipo = tipo;
     }
-    public @PastOrPresent LocalDate getAno() {
+    public @PastOrPresent int getAno() {
         return ano;
     }
-    public void setAno(@PastOrPresent LocalDate ano) {
+    public void setAno(@PastOrPresent int ano) {
         this.ano = ano;
     }
     public @PositiveOrZero Long getQuantidadeCarbono() {

@@ -8,10 +8,25 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 @Path("/carro")
 public class CarroResource {
     private CarroBO carroBO = new CarroBO();
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response listarTodos() {
+        ArrayList<CarroTO> resultado = carroBO.listarTodos();
+        Response.ResponseBuilder response;
+        if (resultado != null) {
+            response = Response.ok(); // 200 (OK)
+        } else {
+            response = Response.status(404); // 404 (NOT FOUND)
+        }
+        response.entity(resultado);
+        return response.build();
+    }
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
