@@ -66,33 +66,6 @@ public class CarroDAO extends Repository{
         return false;
     }
 
-    public ArrayList<CarroTO> listarTodos() {
-        String sql = "select * from T_PW_CARRO order by id_carro";
-        ArrayList<CarroTO> listaCarroTO = new ArrayList<CarroTO>();
-        try (PreparedStatement ps = getConnection().prepareStatement(sql);) {
-            ResultSet rs = ps.executeQuery();
-            if (rs != null) {
-                while (rs.next()) {
-                    CarroTO carroTO = new CarroTO();
-                    carroTO.setIdUsuario(rs.getInt("id_usuario"));
-                    carroTO.setIdCarro(rs.getInt("id_carro"));
-                    carroTO.setModelo(rs.getString("modelo"));
-                    carroTO.setMarca(rs.getString("marca"));
-                    carroTO.setAno(rs.getDate("ano").toLocalDate());
-                    carroTO.setQuantidadeCarbono(rs.getLong("quantidade_carbono"));
-                    carroTO.setRecarga(rs.getLong("recarga"));
-                    carroTO.setTipo(rs.getString("tipo"));
-                    listaCarroTO.add(carroTO);
-                }
-                return listaCarroTO;
-            } else {
-                return null;
-            }
-        } catch (SQLException e) {
-            System.out.println("Erro de SQL: " + e.getMessage());
-            return null;
-        }
-    }
     public CarroTO vizualizarPeloCodigo(int idCarro) {
         CarroTO carroTO = new CarroTO();
         String sql = "select * from T_PW_CARRO where id_carro=?";
