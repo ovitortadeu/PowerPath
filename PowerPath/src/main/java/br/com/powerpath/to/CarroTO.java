@@ -1,0 +1,110 @@
+package br.com.powerpath.to;
+
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.PastOrPresent;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.PositiveOrZero;
+
+import java.time.LocalDate;
+import java.util.Date;
+
+public class CarroTO {
+    @Positive
+    private int idCarro;
+    @Positive
+    private int idUsuario;
+    @NotBlank
+    private String modelo;
+    @NotBlank
+    private String marca;
+    @NotBlank
+    private String tipo;
+    @PositiveOrZero
+    private Long quantidadeCarbono;
+    @PastOrPresent
+    private LocalDate ano;
+    @PositiveOrZero
+    private Long recarga;
+
+    public CarroTO() {
+    }
+
+    public CarroTO(int idCarro, int idUsuario, String modelo, String marca, String tipo, LocalDate ano, Long quantidadeCarbono, Long recarga) {
+        this.idCarro = idCarro;
+        this.idUsuario = idUsuario;
+        this.modelo = modelo;
+        this.marca = marca;
+        this.tipo = tipo;
+        this.ano = ano;
+        this.quantidadeCarbono = quantidadeCarbono;
+        this.recarga = recarga;
+    }
+
+    @Positive
+    public int getIdCarro() {
+        return idCarro;
+    }
+    public void setIdCarro(@Positive int idCarro) {
+        this.idCarro = idCarro;
+    }
+    @Positive
+    public int getIdUsuario() {
+        return idUsuario;
+    }
+    public void setIdUsuario(@Positive int idUsuario) {
+        this.idUsuario = idUsuario;
+    }
+    public @NotBlank String getModelo() {
+        return modelo;
+    }
+    public void setModelo(@NotBlank String modelo) {
+        this.modelo = modelo;
+    }
+    public @NotBlank String getMarca() {
+        return marca;
+    }
+    public void setMarca(@NotBlank String marca) {
+        this.marca = marca;
+    }
+    public @NotBlank String getTipo() {
+        return tipo;
+    }
+    public void setTipo(@NotBlank String tipo) {
+        this.tipo = tipo;
+    }
+    public @PastOrPresent LocalDate getAno() {
+        return ano;
+    }
+    public void setAno(@PastOrPresent LocalDate ano) {
+        this.ano = ano;
+    }
+    public @PositiveOrZero Long getQuantidadeCarbono() {
+        return quantidadeCarbono;
+    }
+    public void setQuantidadeCarbono(@PositiveOrZero Long quantidadeCarbono) {
+        this.quantidadeCarbono = quantidadeCarbono;
+    }
+    public @PositiveOrZero Long getRecarga() {
+        return recarga;
+    }
+    public void setRecarga(@PositiveOrZero Long recarga) {
+        this.recarga = recarga;
+    }
+
+    // De acordo com estimativas, um carro hibrido lança 3 vezes mais CO² na atmosfera.
+    public void atualizarQuantidadeCarbonoParaHibrido() {
+        if ("hibrido".equalsIgnoreCase(this.tipo) && this.quantidadeCarbono != null) {
+            this.quantidadeCarbono /= 3;
+        }
+    }
+
+    // De acordo com estimativas, a cada 1 Kw/h carregado, é poupado 400 a 900 gramas de CO₂ca que iriam pra atmosfera.
+    public void calcularCarbonoComRecarga() {
+        if (this.recarga != null && this.quantidadeCarbono != null) {
+            this.quantidadeCarbono += this.recarga * 650;
+        }
+    }
+
+
+
+}
