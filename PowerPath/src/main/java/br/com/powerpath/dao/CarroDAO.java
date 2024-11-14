@@ -117,4 +117,20 @@ public class CarroDAO extends Repository{
         }
         return carroTO;
     }
+
+    public CarroTO recarregarCarro(CarroTO carro) {
+        String sql = "UPDATE T_PW_CARRO SET RECARGA = ? WHERE ID_CARRO = ?";
+        try (PreparedStatement ps = getConnection().prepareStatement(sql)) {
+            ps.setLong(1, carro.getRecarga());
+            ps.setInt(2, carro.getIdCarro());
+            if (ps.executeUpdate() > 0) {
+                return carro;
+            }
+        } catch (SQLException e) {
+            System.out.println("Erro de SQL: " + e.getMessage());;
+        } finally {
+            closeConnection();
+        }
+        return null;
+    }
 }

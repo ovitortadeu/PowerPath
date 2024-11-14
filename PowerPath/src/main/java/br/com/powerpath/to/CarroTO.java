@@ -6,7 +6,6 @@ import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;
 
 import java.time.LocalDate;
-import java.util.Date;
 
 public class CarroTO {
     @Positive
@@ -91,20 +90,15 @@ public class CarroTO {
         this.recarga = recarga;
     }
 
-    // De acordo com estimativas, um carro hibrido lança 3 vezes mais CO² na atmosfera.
     public void atualizarQuantidadeCarbonoParaHibrido() {
         if ("hibrido".equalsIgnoreCase(this.tipo) && this.quantidadeCarbono != null) {
             this.quantidadeCarbono /= 3;
         }
     }
 
-    // De acordo com estimativas, a cada 1 Kw/h carregado, é poupado 400 a 900 gramas de CO₂ca que iriam pra atmosfera.
     public void calcularCarbonoComRecarga() {
         if (this.recarga != null && this.quantidadeCarbono != null) {
             this.quantidadeCarbono += this.recarga * 650;
         }
     }
-
-
-
 }
