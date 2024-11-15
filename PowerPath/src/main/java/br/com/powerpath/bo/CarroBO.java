@@ -9,7 +9,6 @@ import java.util.ArrayList;
 public class CarroBO {
     private CarroDAO carroDAO;
 
-
     public CarroTO inserir(CarroTO carroTO) throws TipoCarroInvalidoException {
         carroDAO = new CarroDAO();
         try {
@@ -55,16 +54,18 @@ public class CarroBO {
     }
 
     public CarroTO recarregarCarro(CarroTO carro) {
-        try {
+        carroDAO = new CarroDAO();
+        carro = carroDAO.recarregarCarro(carro);
+        if (carro != null) {
             carro.calcularCarbonoComRecarga();
-            if (carro.getTipo().equalsIgnoreCase("hibrido")) {
+            if ("hibrido".equalsIgnoreCase(carro.getTipo())) {
                 carro.atualizarQuantidadeCarbonoParaHibrido();
             }
-            return carroDAO.recarregarCarro(carro);
-        } catch (Exception e) {
-            System.out.println("Erro ao recarregar o carro: " + e.getMessage());
-            return null;
+            carroDAO.atualizarCarro(carro);
         }
+        return carro;
     }
+
+
 
 }

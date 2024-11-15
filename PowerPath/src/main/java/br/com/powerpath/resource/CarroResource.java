@@ -92,13 +92,10 @@ public class CarroResource {
     public Response recarregarCarro(@PathParam("idCarro") int idCarro, CarroTO carroTO) {
         carroTO.setIdCarro(idCarro);
         CarroTO resultado = carroBO.recarregarCarro(carroTO);
-        Response.ResponseBuilder response;
         if (resultado != null) {
-            response = Response.ok(); // 200 OK
+            return Response.ok(resultado).build();
         } else {
-            response = Response.status(400); // 400 BAD REQUEST
+            return Response.status(Response.Status.BAD_REQUEST).entity("Erro ao recarregar o carro").build();
         }
-        response.entity(resultado);
-        return response.build();
     }
 }

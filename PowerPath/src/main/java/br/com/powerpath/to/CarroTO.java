@@ -77,8 +77,8 @@ public class CarroTO {
     public void setAno(@PastOrPresent int ano) {
         this.ano = ano;
     }
-    public @PositiveOrZero Long getQuantidadeCarbono() {
-        return quantidadeCarbono;
+    public Long getQuantidadeCarbono() {
+        return quantidadeCarbono != null ? quantidadeCarbono : 0L;
     }
     public void setQuantidadeCarbono(@PositiveOrZero Long quantidadeCarbono) {
         this.quantidadeCarbono = quantidadeCarbono;
@@ -91,14 +91,19 @@ public class CarroTO {
     }
 
     public void atualizarQuantidadeCarbonoParaHibrido() {
-        if ("hibrido".equalsIgnoreCase(this.tipo) && this.quantidadeCarbono != null) {
+        if (this.tipo.equalsIgnoreCase("hibrido")) {
             this.quantidadeCarbono /= 3;
         }
     }
 
     public void calcularCarbonoComRecarga() {
-        if (this.recarga != null && this.quantidadeCarbono != null) {
+        if (this.recarga != null) {
+            if (this.quantidadeCarbono == null) {
+                this.quantidadeCarbono = 0L;
+            }
             this.quantidadeCarbono += this.recarga * 650;
         }
     }
+
+
 }

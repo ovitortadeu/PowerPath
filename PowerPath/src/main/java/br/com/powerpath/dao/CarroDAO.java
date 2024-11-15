@@ -119,18 +119,45 @@ public class CarroDAO extends Repository{
     }
 
     public CarroTO recarregarCarro(CarroTO carro) {
-        String sql = "UPDATE T_PW_CARRO SET RECARGA = ? WHERE ID_CARRO = ?";
-        try (PreparedStatement ps = getConnection().prepareStatement(sql)) {
-            ps.setLong(1, carro.getRecarga());
-            ps.setInt(2, carro.getIdCarro());
-            if (ps.executeUpdate() > 0) {
-                return carro;
+        String sqlTipo = "SELECT TIPO FROM T_PW_CARRO WHERE ID_CARRO = ?";
+        String sqlUpdate = "UPDATE T_PW_CARRO SET RECARGA = ?, QUANTIDADE_CARBONO = ? WHERE ID_CARRO = ?";
+        try (PreparedStatement psTipo = getConnection().prepareStatement(sqlTipo)) {
+            psTipo.setInt(1, carro.getIdCarro());
+            ResultSet rs = psTipo.executeQuery();
+            if (rs.next()) {
+                carro.setTipo(rs.getString("TIPO"));
+            }
+            try (PreparedStatement psUpdate = getConnection().prepareStatement(sqlUpdate)) {
+                psUpdate.setLong(1, carro.getRecarga());
+                psUpdate.setLong(2, carro.getQuantidadeCarbono());
+                psUpdate.setInt(3, carro.getIdCarro());
+                if (psUpdate.executeUpdate() > 0) {
+                    return carro;
+                }
             }
         } catch (SQLException e) {
-            System.out.println("Erro de SQL: " + e.getMessage());;
+            System.out.println("Erro de SQL: " + e.getMessage());
         } finally {
             closeConnection();
         }
         return null;
     }
+    public void atualizarCarro(CarroTO carro) {
+        String sqlUpdate = "UPDATE T_PW_CARRO SET RECARGA = ?, QUANTIDADE_CARBONO = ? WHERE ID_CARRO = ?";
+
+        try (PreparedStatement psUpdate = getConnection().prepareStatement(sqlUpdate)) {
+            psUpdate.setLong(1, carro.getRecarga());
+            psUpdate.setLong(2, carro.getQuantidadeCarbono());
+            psUpdate.setInt(3, carro.getIdCarro());
+            psUpdate.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println("Erro ao atualizar o carro no banco: " + e.getMessage());
+        } finally {
+            closeConnection();
+        }
+    }
+
+
+
+
 }
