@@ -13,7 +13,7 @@ public class UsuarioBO {
     private UsuarioDAO usuarioDAO = new UsuarioDAO();
 
     /**
-     * Insere um novo usuário no sistema.
+     * Insere um novo usuário no sistema. Faz uma pequena validação do papel do usuário.
      *
      * @param usuario objeto do tipo UsuarioTO contendo os dados do usuário a ser inserido.
      * @return o objeto UsuarioTO inserido no sistema.
@@ -22,6 +22,16 @@ public class UsuarioBO {
     public UsuarioTO inserir(UsuarioTO usuario) throws Exception {
         usuarioDAO = new UsuarioDAO();
         try {
+            // Valida se o ROLE está presente
+            if (usuario.getRole() == null || usuario.getRole().isEmpty()) {
+                throw new IllegalArgumentException("O campo 'ROLE' é obrigatório.");
+            }
+            // Converte o ROLE para letras maiúsculas por padronização
+            usuario.setRole(usuario.getRole().toUpperCase());
+            // Valida se o ROLE é válido (apenas GUEST ou USER)
+            if (!usuario.getRole().equals("GUEST") && !usuario.getRole().equals("USER")) {
+                throw new IllegalArgumentException("O campo 'ROLE' deve ser 'GUEST' ou 'USER'.");
+            }
             if (usuario.getPontos() == null) {
                 usuario.setPontos(0L);
             }
@@ -96,4 +106,15 @@ public class UsuarioBO {
             return false;
         }
     }
+
+    public boolean usuarioPermissoes(int id, String requiredRole) {
+        try {
+            String role = usuarioDAO.usuarioPermissoes(id);
+            return role != null && role.equalsIgnoreCase(requiredRole);
+        } catch (SQLException e) {
+            System.out.println("Erro ao consultar permissões: " + e.getMessage());
+            return false;
+        }
+    }
+
 }

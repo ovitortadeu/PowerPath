@@ -3,6 +3,7 @@ package br.com.powerpath.resource;
 import br.com.powerpath.Exception.TipoCarroInvalidoException;
 import br.com.powerpath.bo.CarroBO;
 import br.com.powerpath.to.CarroTO;
+import br.com.powerpath.to.UsuarioTO;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
@@ -30,16 +31,23 @@ public class CarroResource {
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response inserir(CarroTO carro) throws SQLException, TipoCarroInvalidoException {
-        CarroTO resultado = carroBO.inserir(carro);
-        Response.ResponseBuilder response;
-        if (resultado != null) {
-            response = Response.status(201); // 201 CREATED
-        } else {
-            response = Response.status(400); // 400 BAD REQUEST
+    public Response inserir(CarroTO carro, @HeaderParam("User-Role") String userRole) {
+        try {
+            UsuarioTO usuarioTO = new UsuarioTO();
+            usuarioTO.setRole(userRole);
+            CarroTO resultado = carroBO.inserir(carro);
+            if (resultado != null) {
+                return Response.status(201).entity(resultado).build(); // 201 CREATED
+            } else {
+                return Response.status(400).build(); // 400 BAD REQUEST
+            }
+        } catch (SecurityException e) {
+            // Retorna 403 FORBIDDEN se o usuário não tem permissão
+            return Response.status(Response.Status.FORBIDDEN).entity(e.getMessage()).build();
+        } catch (TipoCarroInvalidoException e) {
+            // Retorna 400 BAD REQUEST se o tipo de carro for inválido
+            return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();
         }
-        response.entity(resultado);
-        return response.build();
     }
 
     @PUT

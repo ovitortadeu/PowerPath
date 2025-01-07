@@ -3,6 +3,7 @@ package br.com.powerpath.bo;
 import br.com.powerpath.dao.CarroDAO;
 import br.com.powerpath.to.CarroTO;
 import br.com.powerpath.Exception.TipoCarroInvalidoException;
+import br.com.powerpath.to.UsuarioTO;
 
 import java.util.ArrayList;
 
@@ -21,7 +22,11 @@ public class CarroBO {
      */
     public CarroTO inserir(CarroTO carroTO) throws TipoCarroInvalidoException {
         carroDAO = new CarroDAO();
+        UsuarioTO usuario = new UsuarioTO();
         try {
+            if (!"USER".equalsIgnoreCase(usuario.getRole())) {
+                System.out.println("Apenas usuários podem adicionar carros.");
+            }
             if (!carroTO.getTipo().equalsIgnoreCase("elétrico") && !carroTO.getTipo().equalsIgnoreCase("hibrido")) {
                 throw new TipoCarroInvalidoException("Em nosso aplicativo só suportamos carros elétricos ou híbridos. Mude o tipo de seu carro para poder inseri-lo.");
             }

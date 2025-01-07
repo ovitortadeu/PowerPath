@@ -16,16 +16,19 @@ public class UsuarioTO {
     private Long pontos;
     @NotBlank
     private String nome;
+    @NotBlank
+    private String role;
 
     public UsuarioTO() {
     }
 
-    public UsuarioTO(int idUsuario, String senha, String email, Long pontos, String nome) {
+    public UsuarioTO(int idUsuario, String senha, String email, Long pontos, String nome, String role) {
         this.idUsuario = idUsuario;
         this.senha = senha;
         this.email = email;
         this.pontos = pontos;
         this.nome = nome;
+        this.role = role;
     }
 
     @Positive public int getIdUsuario() {return idUsuario;}
@@ -55,5 +58,11 @@ public class UsuarioTO {
     }
     public void setNome(@NotBlank String nome) {
         this.nome = nome;
+    }
+    public @NotBlank String getRole() {
+        return role;
+    }
+    public void setRole(@NotBlank String role) {
+        this.role = role;
     }
 }

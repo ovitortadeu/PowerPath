@@ -10,13 +10,14 @@ import java.util.ArrayList;
 public class UsuarioDAO extends Repository{
 
     public UsuarioTO inserir(UsuarioTO usuarioTO) {
-        String sql = "INSERT INTO T_PW_USUARIO (nome, senha, email, pontos) " +
-                "VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO T_PW_USUARIO (nome, senha, email, pontos, role) " +
+                "VALUES (?, ?, ?, ?, ?)";
         try (PreparedStatement ps = getConnection().prepareStatement(sql)) {
             ps.setString(1, usuarioTO.getNome());
             ps.setString(2, usuarioTO.getSenha());
             ps.setString(3, usuarioTO.getEmail());
             ps.setLong(4, usuarioTO.getPontos());
+            ps.setString(5, usuarioTO.getRole()); // Novo campo ROLE
             if (ps.executeUpdate() > 0) {
                 return usuarioTO;
             }
@@ -126,4 +127,23 @@ public class UsuarioDAO extends Repository{
             return ps.executeUpdate() > 0;
         }
     }
+
+    public String usuarioPermissoes(int userId) throws SQLException {
+        String sql = "SELECT role FROM usuarios WHERE id_usuario = ?";
+        try (PreparedStatement ps = getConnection().prepareStatement(sql)) {
+            ps.setInt(1, userId);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getString("role");
+                }
+            }
+        }
+        return null;
+    }
+
+
+
+
+
+
 }

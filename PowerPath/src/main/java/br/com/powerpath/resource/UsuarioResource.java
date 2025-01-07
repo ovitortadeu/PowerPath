@@ -97,4 +97,17 @@ public class UsuarioResource {
         }
         return response.build();
     }
+
+    @GET
+    @Path("/validar/{id}")
+    public Response validarUsuario(@PathParam("id") int id) {
+        boolean isAllowed = usuarioBO.usuarioPermissoes(id, "USER");
+        if (isAllowed) {
+            return Response.ok("Usuário autorizado.").build();
+        } else {
+            return Response.status(Response.Status.FORBIDDEN)
+                    .entity("Acesso negado.").build();
+        }
+    }
+
 }
