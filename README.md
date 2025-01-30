@@ -49,3 +49,7 @@ Contém configurações:
 
 ### `Main.java`
 Ponto de entrada da aplicação.
+
+## Avisos
+- Os endpoints não estão funcionando porque eles estão ligados ao banco de dados Oracle da faculdade, e para não expor dados importantes eu os retirei. Para arrumá-los só precisaria mudar para MySQL, o que eu posso fazer futuramente.
+- Aplicação está funcionando em Docker também, fiz a maioria com a ajuda do GPT e gostei muito de usa-lo! Realmente uma boa ferramenta.
